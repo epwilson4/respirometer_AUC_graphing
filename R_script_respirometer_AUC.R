@@ -38,24 +38,32 @@ plot_media <- function(data, media, parent_strain) {
     #Mutate adds new column to data frame called normalized AUC
     mutate(normalized_AUC = Area.under.the.curve / parent_AUC) %>%
     group_by(Strain, Media) %>%
-    summarise(avg_normalized_AUC = mean(normalized_AUC)) %>%
+    summarise(avg_normalized_AUC = mean(normalized_AUC),
+    sd_normalized_AUC = sd(normalized_AUC)) %>%
     ungroup()
   
   ggplot(averaged_data, aes(x = Strain, y = avg_normalized_AUC, fill = Strain)) +
-    geom_bar(stat = "identity") +
+    geom_bar(stat = "identity", width=0.5) +
+    geom_errorbar(aes(ymin = avg_normalized_AUC - sd_normalized_AUC, 
+                     ymax = avg_normalized_AUC + sd_normalized_AUC),
+                 width = 0.2) + 
+    
     labs(
-      title = paste("AUC", media),
+      title = paste(media),
       x = "Strain",
-      y = "Relative Growth (normalized to parent)"
+      y = "Growth relative to wild-type parent"
     ) +
-    theme_minimal()
+    theme_minimal()+
+    theme(legend.position = "none",
+          plot.title = element_text(hjust = 0.5),
+          axis.title = element_text(size = 14),
+          axis.text = element_text(size=12))
 }
 
 plot_ASGH_DMSO <- plot_media(respirometer_data, "2016 ASGH + 1% DMSO", "Y2084")
 plot_ASGH_PROTO <- plot_media(respirometer_data, "2016 ASGH + 18.75 mg/L protodioscin ", "Y2084")
 plot_YPX <- plot_media(respirometer_data, "YPX", "Y2084")
 
-plot_YPX
+#plot_YPX
 plot_ASGH_PROTO
 #plot_ASGH_DMSO
-
