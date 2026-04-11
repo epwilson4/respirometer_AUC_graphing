@@ -19,8 +19,6 @@ read_in_csv <- function(file_path) {
 #Calls function to read in csv file
 respirometer_data <- read_in_csv("cyr1_mutants_respirometer_data.csv")
 
-colnames(respirometer_data)
-
 plot_media <- function(data, media, parent_strain) {
   #Filters out all other media types, condensing data to only include data points in the media type inputted
   filtered_data <- filter(data, Media == media)
@@ -40,7 +38,8 @@ plot_media <- function(data, media, parent_strain) {
     group_by(Strain, Media) %>%
     summarise(avg_normalized_AUC = mean(normalized_AUC),
     sd_normalized_AUC = sd(normalized_AUC)) %>%
-    ungroup()
+    ungroup() %>%
+    mutate(Strain = factor(Strain, levels = c("Y2084", "Y2060","Y2092")))
   
   ggplot(averaged_data, aes(x = Strain, y = avg_normalized_AUC, fill = Strain)) +
     geom_bar(stat = "identity", width=0.3, color = "black", linewidth = 0.3) +
@@ -78,9 +77,7 @@ plot_media <- function(data, media, parent_strain) {
                                    color = "black"),
           axis.text.x = element_text(size = 12,
                                      face = "bold",
-                                     color = c("Y2084" = "#33CC33",
-                                               "Y2060" = "#FF7733",
-                                               "Y2092" = "#FF3399")),
+                                     color = c("#33CC33","#FF7733","#FF3399")),
           panel.grid.major.x = element_blank())
 
 }
@@ -92,3 +89,4 @@ plot_YPX <- plot_media(respirometer_data, "YPX", "Y2084")
 #plot_YPX
 plot_ASGH_PROTO
 #plot_ASGH_DMSO
+
