@@ -1,6 +1,6 @@
 #Title: Respirometer AUC graphing
 #Name: Emma P Wilson
-#Date last updated: 4/7/26
+#Date last updated: 4/14/26
 
 #Libraries
 library(tibble)
@@ -19,6 +19,7 @@ read_in_csv <- function(file_path) {
 #Calls function to read in csv file
 respirometer_data <- read_in_csv("cyr1_mutants_respirometer_data.csv")
 
+#This function filters desired data and creates a bar plot
 plot_media <- function(data, media, parent_strain) {
   #Filters out all other media types, condensing data to only include data points in the media type inputted
   filtered_data <- filter(data, Media == media)
@@ -29,7 +30,7 @@ plot_media <- function(data, media, parent_strain) {
     filter(Strain == parent_strain) %>%
     #Saves only two columns from the data: replicate and area under the curve 
     select(Replicate, parent_AUC = Area.under.the.curve)
-  
+
   # Join parent AUC by replicate, normalize, then average
   averaged_data <- filtered_data %>%
     left_join(parent_AUC, by = "Replicate") %>%
@@ -52,7 +53,7 @@ plot_media <- function(data, media, parent_strain) {
                                  "Y2092" = "#FF3399")) +
     
     scale_x_discrete(labels =c("Y2084"= "CYR1 PDR3 Parent",
-                               "Y2060" = "cyr1 pdr3 ALE Strain",
+                             "Y2060" = expression(atop(italic("cyr1"^"T696P")~italic("pdr3"^"L272N"),"ALE Strain")),
                                "Y2092" = "cyr1 PDR3")) +
     
     
@@ -75,10 +76,11 @@ plot_media <- function(data, media, parent_strain) {
           axis.text.y = element_text(size=12,
                                    face = "bold",
                                    color = "black"),
-          axis.text.x = element_text(size = 12,
+          axis.text.x = element_text(size = 10,
                                      face = "bold",
                                      color = c("#33CC33","#FF7733","#FF3399")),
-          panel.grid.major.x = element_blank())
+          panel.grid.major.x = element_blank(),
+          plot.margin = margin(b=20))
 
 }
 
@@ -94,7 +96,3 @@ plot_YPX <- plot_media(respirometer_data, "YPX", "Y2084")
 #plot_YPX
 plot_ASGH_PROTO
 #plot_ASGH_DMSO
-
-
-
-#future goals with script: t-test, p-values, saving plots as pngs 
