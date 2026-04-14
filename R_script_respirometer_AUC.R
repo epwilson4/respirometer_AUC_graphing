@@ -83,10 +83,18 @@ plot_media <- function(data, media, parent_strain) {
 }
 
 plot_ASGH_DMSO <- plot_media(respirometer_data, "2016 ASGH + 1% DMSO", "Y2084")
+#ggsave("ASGH_DMSO_cyr1.png", plot = plot_ASGH_DMSO, width = 6, height = 5, dpi = 300)
+
 plot_ASGH_PROTO <- plot_media(respirometer_data, "2016 ASGH + 18.75 mg/L protodioscin ", "Y2084")
+#ggsave("ASGH_PROTO_cyr1.png", plot = plot_ASGH_PROTO, width = 6, height = 5, dpi = 300)
+
 plot_YPX <- plot_media(respirometer_data, "YPX", "Y2084")
+#ggsave("YPX_cyr1.png", plot = plot_YPX, width = 6, height = 5, dpi = 300)
 
 #plot_YPX
 plot_ASGH_PROTO
 #plot_ASGH_DMSO
 
+
+
+#future goals with script: t-test, p-values, saving plots as pngs 
